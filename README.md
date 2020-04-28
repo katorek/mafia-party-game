@@ -4,7 +4,7 @@
 
 This is attempt to create place, where group of friends can host [Mafia Party Game](https://en.wikipedia.org/wiki/Mafia_%28party_game%29) online.  
 My primary goal is to remove the need for Game Master who coordinates game so that everybody can actively participate in game.  
-
+Let's say "working" demo can be found [here](http://mafia.). There is almost always up-to-date version from develop branch.
 
 ## Technology stack
 
