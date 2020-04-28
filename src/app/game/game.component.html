@@ -62,11 +62,17 @@
         </ng-container>
 
         <ng-container matColumnDef="vote">
-          <th mat-header-cell *matHeaderCellDef>Głosowanie</th>
+          <th mat-header-cell *matHeaderCellDef>
+            <p *ngIf="!player.dead">Głosowanie</p>
+            <p *ngIf="player.dead">Role graczy</p>
+          </th>
           <td mat-cell *matCellDef="let element">
-            <button *ngIf="!element.dead" mat-flat-button (click)="vote(element)" [disabled]="isDisabled('vote')">
+            <button *ngIf="!element.dead && !player.dead" mat-flat-button (click)="vote(element)" [disabled]="isDisabled('vote')">
               Zagłosuj
             </button>
+            <div *ngIf="player.dead">
+              {{showRole(element.role)}}
+            </div>
           </td>
           <td mat-footer-cell *matFooterCellDef></td>
         </ng-container>
@@ -170,6 +176,8 @@
         <button mat-raised-button (click)="setRole('citizen')">Citizen</button>
         <button mat-raised-button (click)="setRole('detective')">Detective</button>
         <button mat-raised-button (click)="setRole('doctor')">Doctor</button>
+        <button mat-raised-button (click)="player.dead = true">Dead</button>
+        <button mat-raised-button (click)="player.dead = false">Alive</button>
       </div>
       <div fxLayout="column">
         <button mat-raised-button (click)="setPhase(true)">Day</button>

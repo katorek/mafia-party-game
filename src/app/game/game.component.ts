@@ -8,7 +8,6 @@ import {Topic} from '../model/topic';
 import {FormControl, FormGroup} from '@angular/forms';
 import * as _ from 'lodash';
 import {MatDialog} from '@angular/material/dialog';
-import {WinnerDialogComponent} from '../winner-dialog/winner-dialog.component';
 
 @Component({
   selector: 'app-game',
@@ -188,6 +187,10 @@ export class GameComponent implements OnInit, AfterViewChecked {
       return user?.vote?.length + ' <- [' + user.vote.map(uuid => this.players.find(u => u.uuid === uuid)?.user).join(', ') + ']';
     }
     return '';
+  }
+
+  showRole(role: string) {
+    return this.getInfo('role', role).show;
   }
 
   // Development functions

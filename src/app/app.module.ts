@@ -14,7 +14,6 @@ import {StorageServiceModule} from 'ngx-webstorage-service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatRadioModule} from '@angular/material/radio';
-import { WinnerDialogComponent } from './winner-dialog/winner-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -24,8 +23,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     AppComponent,
     LobbyComponent,
     GameComponent,
-    HomeComponent,
-    WinnerDialogComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,
