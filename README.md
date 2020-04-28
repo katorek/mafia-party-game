@@ -1,27 +1,38 @@
-# MafiaSocketio
+# Mafia Party game
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.2.
+## Description
 
-## Development server
+This is attempt to create place, where group of friends can host [Mafia Party Game](https://en.wikipedia.org/wiki/Mafia_%28party_game%29) online.  
+My primary goal is to remove the need for Game Master who coordinates game so that everybody can actively participate in game.  
+Let's say "working" demo can be found [here](http://mafia.). There is almost always up-to-date version from develop branch.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Technology stack
 
-## Code scaffolding
+Frontend: Angular 9  
+Backend: Node express  
+I've decided to use SocketIO (Websocket Client) for communication between webpage and server
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Todo
 
-## Build
+1. Implement custom logic into game designed by me and my friends - action cards - to diversify the gameplay
+2. Enable translation - add I18n service and english language - currently everything is in my native language - polish
+ 
+## Setting up before building & developing
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+1. `npm install` in main directory and inside `socketio-node` directory  
+2. Change [redirectUrl](socketio-node/index.js#L12) `redirectUrl` wiht your personal site  
+3. Change [SOCKET_ENDPOINT](src/environments/environment.prod.ts#L3) `SOCKET_ENDPOINT` with your personal site  
+ 
+## Developing, testing etc.
 
-## Running unit tests
+server: 
+1. For easy testing i created some fake data, to use it change [development](socketio-node/index.js#L11) to `true`
+`node index.js`  
+front: `ng serve` and navigate to `http://localhost:4200/`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Deploying on production
 
-## Running end-to-end tests
+server: 
+1. Set [development](socketio-node/index.js#L11) to `false` just copy whole [socketio-node](socketio-node) directory
+front: `ng build --prod`
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
