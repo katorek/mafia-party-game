@@ -1,0 +1,102 @@
+.alive {
+  background-color: rgba(0, 255, 0, 0.2);
+}
+
+.mafia {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+.dead {
+  background-color: rgba(5, 0, 0, 0.2);
+  font-style: italic;
+  text-decoration-line: line-through;
+  text-decoration-style: dotted;
+}
+
+.myself {
+  font-weight: bold;
+}
+
+table {
+  width: 94%; /* 100 - 2* margin*/
+  margin: 2% 3%;
+}
+
+.chat {
+  width: 94%;
+  margin: 1% 3%;
+  height: 400px;
+}
+
+.chat-header {
+  margin: 0 0 7px;
+  text-align: center;
+}
+
+
+.wrappable {
+  overflow: auto;
+}
+
+.chat-content {
+  overflow: auto;
+  width: 100%;
+  white-space: pre-wrap
+}
+
+.chat-from {
+  margin: 0 2px;
+  font-weight: bold;
+}
+
+.mat-list-base .mat-list-item {
+  min-height: 48px;
+  height: 100%;
+}
+
+.chat-row {
+  /*padding-top: 8px;*/
+  /*padding-bottom: 6px;*/
+  padding: 8px 4px 6px;
+}
+
+.chat-divider {
+  margin: 0 5px;
+}
+
+.chat-end {
+  margin: 0 10px;
+}
+
+.winnerBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 98;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.winner {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  z-index: 99;
+  transform: translate(-50%, -50%);
+  font-weight: bolder;
+}
+
+.winner-mafia {
+  color: darkorange;
+}
+
+.winner-town {
+  color: springgreen;
+}
+
+.winner-h1 {
+  font-weight: 500;
+  font-size: 200%;
+}

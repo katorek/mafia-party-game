@@ -1,0 +1,201 @@
+<div fxLayout="column" fxLayoutAlign="space-around stretch">
+
+  <!--  Player Role -->
+  <div *ngIf="this.role" fxLayout="row" fxLayoutAlign="space-between start">
+    <div fxFlex="20" fxFlexOffset="5">
+      <h2>{{this.role?.show}}</h2>
+    </div>
+    <div fxFlex="70">
+      <p>{{this.role?.desc}}</p>
+    </div>
+  </div>
+
+  <!--  Player Action -->
+  <div *ngIf="this.action" fxLayout="row" fxLayoutAlign="space-between start">
+    <div fxFlex="20" fxFlexOffset="5">
+      <h2>{{this.action?.show}}</h2>
+    </div>
+    <div fxFlex="70">
+      <p>{{this.action?.desc}}</p>
+    </div>
+  </div>
+
+  <div *ngIf="this.phase" fxLayout="row" fxLayoutAlign="space-between start">
+    <div fxFlex="20" fxFlexOffset="5">
+      <h2>{{getPhase()?.show}}</h2>
+    </div>
+    <div fxFlex="70">
+      <p>{{getPhase()?.desc}}</p>
+    </div>
+  </div>
+
+  <!--  Users table-->
+  <div fxLayout="row" fxLayoutAlign="space-evenly start"
+       fxLayout.lt-md="column" fxLayoutAlign.lt-md="space-between start"
+       fxLayoutGap="2"
+  >
+    <div fxFlexOffset="2" fxFlex="{{(this.player?.role === 'mafia')?50:96}}"
+    fxFill
+    >
+      <table mat-table [dataSource]="players" class="mat-elevation-z8">
+        <!--      'user'-->
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef>Gracz</th>
+          <td mat-cell *matCellDef="let element">
+            <div [ngClass]="{myself: element.user === player.user}">{{element.user}}</div>
+          </td>
+          <td mat-footer-cell *matFooterCellDef>{{summary()}}</td>
+        </ng-container>
+        <!--      'dead'-->
+        <ng-container matColumnDef="dead">
+          <th mat-header-cell *matHeaderCellDef>Czy żyje</th>
+          <td mat-cell *matCellDef="let element">{{dead(element)}}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <!--      'vote', -->
+        <ng-container matColumnDef="votes">
+          <th mat-header-cell *matHeaderCellDef>Kto głosował</th>
+          <td mat-cell *matCellDef="let element">
+            {{voteSummary(element)}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="vote">
+          <th mat-header-cell *matHeaderCellDef>Głosowanie</th>
+          <td mat-cell *matCellDef="let element">
+            <button *ngIf="!element.dead" mat-flat-button (click)="vote(element)" [disabled]="isDisabled('vote')">
+              Zagłosuj
+            </button>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <!--      'detective'-->
+        <ng-container matColumnDef="detective">
+          <th mat-header-cell *matHeaderCellDef>Sprawdź czy z mafii</th>
+          <td mat-cell *matCellDef="let element">
+            <button *ngIf="!element.checked" mat-flat-button color="accent" (click)="check(element)"
+                    [disabled]="isDisabled('detective')">
+              Sprawdz
+            </button>
+            <div *ngIf="element.checked">
+              {{isMafia(element)}}
+            </div>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <!--      'mafia', -->
+        <ng-container matColumnDef="mafia">
+          <th mat-header-cell *matHeaderCellDef>Akcje mafii</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-flat-button color="warn" *ngIf="!element.dead" (click)="kill(element)"
+                    [disabled]="isDisabled('mafia')">Zabij
+            </button>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <!--'doctor'-->
+        <ng-container matColumnDef="doctor">
+          <th mat-header-cell *matHeaderCellDef>Doktor</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-raised-button color="accent" *ngIf="!element.dead" (click)="heal(element)"
+                    [disabled]="isDisabled('doctor')">Ulecz
+            </button>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <!--suppress AngularUndefinedBinding -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!--suppress AngularUndefinedBinding -->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            [ngClass]="{alive: !isDead(row), dead: isDead(row), mafia: seeIfMafia(row)}"></tr>
+        <!--suppress AngularUndefinedBinding -->
+        <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+      </table>
+    </div>
+
+    <div *ngIf="this.player?.role === 'mafia'"
+         fxFlexAlign.lt-md="stretch"
+         fxFlex="50" fxLayout="column" fxLayoutAlign="space-around none"
+         class="mat-elevation-z8 chat">
+      <div fxFlexAlign="stretch">
+        <h1 class="chat-header mat-elevation-z2">Czat Mafii</h1>
+      </div>
+      <div #scrollMe class="chat-content">
+        <mat-list>
+          <mat-list-item *ngFor="let msg of mafiaMessages">
+            <div fxFill>
+              <div fxLayout="row" fxLayoutAlign="space-between start"
+                   [attr.dir]="msg.from !== this.player.user ? 'ltr' : 'rtl'"
+                   class="mat-elevation-z1 chat-row">
+                <div class="chat-from">{{msg.from}}:</div>
+                <div class="chat-divider"></div>
+                <div class="chat-content">{{msg.content}}</div>
+                <div class="chat-end"></div>
+                <!--                <p></p>-->
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+
+      <!--  Czat mafii-->
+      <div style="padding: 10px">
+        <form [formGroup]="form" (ngSubmit)="sendMsg()" fxLayout="row" fxLayoutAlign="space-evenly none">
+
+          <mat-form-field fxFlex="90">
+            <mat-label>wiadomość</mat-label>
+            <input formControlName="msgArea" matInput name="message" autocomplete="off">
+          </mat-form-field>
+          <button mat-raised-button color="primary" fxFlex type="submit" [disabled]="!isFormValid()">Wyślij</button>
+        </form>
+      </div>
+
+    </div>
+    <span></span>
+  </div>
+
+  <div *ngIf="isDevelopment()" fxHide.lt-md>
+    <div fxLayout="row">
+      <div fxLayout="column">
+        <button mat-raised-button (click)="randomMsg()">RandomMsg()</button>
+        <button mat-raised-button (click)="repeatMsg()">RepeatMsg()</button>
+      </div>
+      <div fxLayout="column">
+        <button mat-raised-button (click)="refreshData()">RefreshData()</button>
+      </div>
+      <div fxLayout="column">
+        <button mat-raised-button (click)="setRole('mafia')">Mafia</button>
+        <button mat-raised-button (click)="setRole('citizen')">Citizen</button>
+        <button mat-raised-button (click)="setRole('detective')">Detective</button>
+        <button mat-raised-button (click)="setRole('doctor')">Doctor</button>
+      </div>
+      <div fxLayout="column">
+        <button mat-raised-button (click)="setPhase(true)">Day</button>
+        <button mat-raised-button (click)="setPhase(false)">Night</button>
+      </div>
+      <div fxLayout="column">
+        <button mat-raised-button (click)="didAction = true">didAction = true</button>
+        <button mat-raised-button (click)="didAction = false">didAction = false</button>
+      </div>
+      <div fxLayout="column">
+        <button mat-raised-button (click)="winner = 'mafia'">winner = mafia</button>
+        <button mat-raised-button (click)="winner = 'town'">winner = town</button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+<div [ngClass]="{winnerBackground: (winner !== '')}">
+  <div *ngIf="winner !== ''" class="winner">
+    <div [ngClass]="{'winner-mafia': (winner === 'mafia'), 'winner-town': (winner !== 'mafia')}">
+      <h1 class="winner-h1">{{getWinner()}}</h1>
+      <a mat-raised-button color="primary" routerLink="" routerLinkActive="active" (click)="cleanStorage()" class="home-button">
+        Strona główna
+      </a>
+    </div>
+
+  </div>
+</div>

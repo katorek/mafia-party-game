@@ -1,0 +1,120 @@
+<div fxLayout="column" fxLayoutAlign="space-between stretch">
+  <h1 fxLayoutAlign="center">Poczekalnia: {{lobby}}</h1>
+
+  <div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="0"
+       fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center stretch"
+       fxLayoutGap.lt-sm="25px">
+
+    <div fxFlex="35" fxLayout="column" fxLayoutAlign="stretch"
+         class="mat-elevation-z4 user-list">
+      <!--        <h3>Ty: {{me()}}</h3>-->
+      <h2 fxFlexAlign="center" fxFlexOffset="10px">W poczekalni:</h2>
+      <mat-list>
+        <mat-list-item *ngFor="let player of players">
+          <div fxLayout="row" fxLayoutAlign="space-between center" fxFill
+               [ngClass]="{myself: player.user === this.user.user}">
+            {{player.user}}
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+
+    <div fxFlex="65" class="mat-elevation-z4 user-list"
+         fxLayout="column" fxLayoutAlign="space-between stretch">
+      <h2 fxFlexAlign="center" fxFlexOffset="10px">Ustawienia gry</h2>
+
+      <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="10px">
+        <div fxFlex="40" fxLayout="column" fxLayoutAlign="space-between stretch">
+          <h3 fxFlexAlign="center">Role</h3>
+          <mat-list fxLayout="column" fxLayoutAlign="space-between center">
+            <mat-list-item *ngFor="let role of settings.roles; let in=index">
+              <mat-form-field fxFill>
+                <mat-label>{{role.show}}</mat-label>
+                <input matInput min="{{role.min}}" [attr.max]="(role.max === -1)?null:role.max"
+                       value="{{role.value}}"
+                       type="number" [disabled]="!isHost() || !role.enabled"
+                       [(ngModel)]="settings.roles[in].value" (change)="updateForm()"
+                >
+              </mat-form-field>
+            </mat-list-item>
+          </mat-list>
+          <p fxFlexAlign="center">Łącznie: {{summary()}}</p>
+          <div  fxLayoutAlign="center">
+            <div [hidden]="!isHost()">
+              <button  routerLink="/game" color="primary" mat-raised-button (click)="startGame()" class="start-button">
+                Start
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <div fxFlex="60" fxLayout="column"
+             fxLayoutAlign="space-between stretch"
+             fxLayoutGap="10px">
+          <h3 fxLayoutAlign="center">Inne opcje</h3>
+          <p fxLayoutAlign="center">Kto umiera podczas remisu w głosowaniu ?</p>
+          <mat-radio-group [(ngModel)]="tieSelected" fxLayout="column" fxLayoutGap="6px">
+            <mat-radio-button
+              fxLayout="row"
+              *ngFor="let option of tieOptions"
+              [value]="option.key" [disabled]="!option.enabled">
+              {{option.show}}
+            </mat-radio-button>
+          </mat-radio-group>
+          <span></span>
+          <!--          <p>Ala ma ktoa a kot ma ale</p>-->
+          <!--          <p>Ala ma ktoa a kot ma ale</p>-->
+          <!--          <p>Ala ma ktoa a kot ma ale</p>-->
+
+
+          <div fxLayout="column" fxLayoutAlign="space-between stretch">
+            <mat-slide-toggle
+              color="accent"
+              [(ngModel)]="actionCardsChecked"
+              [checked]="actionCardsChecked"
+              [disabled]="!actionCardsWorking && !isDevelopment()">
+              Karty akcji
+            </mat-slide-toggle>
+            <div>
+
+            </div>
+            <div *ngIf="false">
+              <mat-selection-list [(ngModel)]="actionCards" (ngModelChange)="updateForm()">
+                <mat-list-option *ngFor="let card of ActionCards | keyvalue" [selected]="isSelected(card.key)"
+                                 checkboxPosition="before"
+                                 [disabled]="!isHost() || !actionCardsChecked" [value]="card.key">
+                  <div fxLayout="row" fxLayoutAlign="space-between center">
+                    {{card.value}}
+<!--                    <mat-checkbox labelPosition="before" [disabled]="!isSelected(card.key)">Duplikaty ?</mat-checkbox>-->
+                  </div>
+
+                </mat-list-option>
+              </mat-selection-list>
+            </div>
+<!--            todo-->
+            <div *ngIf="actionCardsChecked">
+              <mat-list>
+                <mat-list-item *ngFor="let card of actionCards; let in = index" class="card-checkboxes">
+                  <div fxLayout="row" fxLayoutAlign="space-between center" fxFill class="card-checkboxes">
+                    <mat-checkbox labelPosition="after"
+                                  [disabled]="!isHost() || !actionCardsChecked" [(ngModel)]="card.enabled">
+                      {{card.card}}
+                    </mat-checkbox>
+                    <mat-checkbox labelPosition="before"
+                                  [checked]="(card.enabled)?card.duplicates:false"
+                                  [disabled]="!isHost() || !actionCardsChecked || !card.enabled" [(ngModel)]="card.duplicates">
+                      Duplikaty ?
+                    </mat-checkbox>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>

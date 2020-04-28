@@ -1,0 +1,79 @@
+<div fxLayout="column" fxLayoutAlign="space-around none" fxLayoutGap="30px">
+
+  <form #lobbyform>
+    <div fxLayout="column" fxLayoutAlign="space-evenly stretch">
+      <div fxLayout="column" fxLayout.gt-xs="row" fxLayoutAlign="space-evenly center">
+
+        <div class="field">
+          <mat-form-field>
+            <input [(ngModel)]="username" name="Ania" #usernameInput minlength="3" matInput required
+                   placeholder="Nazwa użytkownika">
+            <mat-hint>Minimum 3 znaki</mat-hint>
+          </mat-form-field>
+        </div>
+        <div class="field">
+          <mat-form-field>
+            <input #lobbyname matInput required minlength="4" placeholder="Nazwa poczekalni">
+            <mat-hint>Minimum 4 znaki</mat-hint>
+
+          </mat-form-field>
+
+        </div>
+        <div>
+
+          <button routerLink="/lobby" type="button" mat-raised-button (click)="joinLobby(lobbyname.value, true)"
+                  [disabled]="!lobbyname.checkValidity() || !usernameInput.checkValidity() || lobbynameAlreadyExists(lobbyname.value)"
+                  class="field-button">Nowa
+            poczekalnia
+          </button>
+        </div>
+      </div>
+      <div fxLayoutAlign="center" *ngIf="lobbynameAlreadyExists(lobbyname.value)" class="warning">
+        Poczekalnia już istnieje
+      </div>
+    </div>
+
+
+  </form>
+  <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-evenly stretch">
+    <div fxFlexOffset="3" fxFlex="57" fxLayout="column" fxLayoutAlign="space-around stretch"
+         class="mat-elevation-z4 list">
+      <h2 fxFlexAlign="center" fxFlexOffset="1">Lista poczekalni:</h2>
+      <div *ngIf="lobbies.length===0">
+        <p class="empty">Pusto tu ;( załóż nową poczekalnie !</p>
+      </div>
+
+      <mat-list>
+        <mat-list-item *ngFor="let lobbyName of lobbies">
+          <div fxLayout="row" fxLayoutAlign="space-between center" fxFill>
+            {{lobbyName}}
+            <button routerLink="/lobby" type="button" mat-flat-button color="primary"
+                    (click)="joinLobby(lobbyName, false)"
+                    [disabled]="!usernameInput.checkValidity()">Dołącz
+            </button>
+          </div>
+
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div fxFlex="3"><span></span></div>
+    <div fxFlex fxLayout="column" fxLayoutAlign="space-around stretch" class="mat-elevation-z4 list">
+      <h2 fxFlexAlign="center" fxFlexOffset="1">Aktywne gry:</h2>
+      <mat-list>
+        <mat-list-item *ngFor="let gameName of games">
+          <div>
+            {{gameName}}
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div fxFlex="3">
+      <span></span>
+    </div>
+  </div>
+
+
+</div>
+
+
+

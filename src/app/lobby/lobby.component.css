@@ -1,0 +1,31 @@
+/*input {*/
+/*  width: 50px;*/
+/*}*/
+
+/*mat-form-field {*/
+/*  width: 50%;*/
+/*}*/
+
+.mat-list-option {
+  height: 10px;
+}
+
+.mat-list-base .mat-list-option {
+  height: 25px;
+}
+
+.myself {
+  font-weight: bold;
+}
+
+.user-list {
+  margin: 0 20px;
+}
+
+.start-button {
+  font-size: 150%;
+}
+
+.mat-list-base .mat-list-item .card-checkboxes {
+  height: 25px;
+}
