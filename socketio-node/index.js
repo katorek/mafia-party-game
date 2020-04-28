@@ -184,8 +184,11 @@ io.on('connection', (socket) => {
             const votesSorted = game.users.filter(u => !u.dead).map(u => (u.vote && u.vote.length > 0) ? u.vote.length : 0).sort((a, b) => b - a);
             const allVotes = votesSorted.reduce((a, b) => a + b);
 
+            const alivePlayers = game.users.filter(u => !u.dead).length;
+
             // if everyone voted
-            if (allVotes === game.users.length) {
+            // if (allVotes === game.users.length) {
+            if (allVotes === alivePlayers) {
 
               /* one player will die*/
               if (votesSorted[0] > votesSorted[1]) {
@@ -395,12 +398,16 @@ io.on('connection', (socket) => {
     gameSettings.roles.forEach(r => {
       lobby.roles[r.key] = r.value
     })
-
-    while (lobby.roles.mafia-- > 0) roles.push(Role.MAFIA);
-    while (lobby.roles.citizen-- > 0) roles.push(Role.CITIZEN);
-    while (lobby.roles.detective-- > 0) roles.push(Role.DETECTIVE);
-    while (lobby.roles.doctor-- > 0) roles.push(Role.DOCTOR);
-    while (lobby.roles.terrorist-- > 0) roles.push(Role.TERRORIST);
+    let i = 0;
+    while (i++ < lobby.roles.mafia) roles.push(Role.MAFIA);
+    i = 0;
+    while (i++ < lobby.roles.citizen) roles.push(Role.CITIZEN);
+    i = 0;
+    while (i++ < lobby.roles.detective) roles.push(Role.DETECTIVE);
+    i = 0;
+    while (i++ < lobby.roles.doctor) roles.push(Role.DOCTOR);
+    i = 0;
+    while (i++ < lobby.roles.terrorist) roles.push(Role.TERRORIST);
 
     roles = _.shuffle(roles)
     users = _.shuffle(users)
