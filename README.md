@@ -20,19 +20,20 @@ I've decided to use SocketIO (Websocket Client) for communication between webpag
 ## Setting up before building & developing
 
 1. `npm install` in main directory and inside `socketio-node` directory  
-2. Change [redirectUrl](socketio-node/index.js#L12) `redirectUrl` wiht your personal site  
+2. Change [redirectUrl](socketio-node/index.js#L12) `redirectUrl` with your personal site  
 3. Change [SOCKET_ENDPOINT](src/environments/environment.prod.ts#L3) `SOCKET_ENDPOINT` with your personal site  
  
 ## Developing, testing etc.
 
-server: 
-1. For easy testing i created some fake data, to use it change [development](socketio-node/index.js#L11) to `true`
-`node index.js`  
-front: `ng serve` and navigate to `http://localhost:4200/`
+* server: 
+1. For easy testing i created some fake data, to use it change [development](socketio-node/index.js#L11) to `true`  
+Start server with: `node index.js`  
+* front: `ng serve` and navigate to `http://localhost:4200/`
 
 ## Deploying on production
 
-server: 
-1. Set [development](socketio-node/index.js#L11) to `false` just copy whole [socketio-node](socketio-node) directory
-front: `ng build --prod`
+* server: 
+1. Set [development](socketio-node/index.js#L11) to `false` 
+2. Start [index.js](socketio-node/index.js) with `node index.js`
+* front: `ng build --prod`
 
